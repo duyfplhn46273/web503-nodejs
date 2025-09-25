@@ -9,7 +9,7 @@ postRouter.get("/", (req, res) => {
 });
 
 // endpoint: /posts/detai/:id
-postRouter.get("/detail/:id", (req, res) => {
+postRouter.get("/:id", (req, res) => {
   res.send("Post detailcó id la:" + req.params?.id);
 });
 
