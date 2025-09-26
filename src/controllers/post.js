@@ -4,8 +4,28 @@ let posts = [
 ];
 
 
-export function getPost(req, res){
-    res.json(posts);
+export function getPosts(req, res){
+    try {
+        const { search } = req.query;
+
+        // Không có bài viết nào trong hệ thống
+        if (!posts || posts.length === 0) {
+            return res.status(404).json({ message: "Không có bài viết nào" });
+        }
+
+        // Nếu có tham số search: lọc theo tiêu đề (không phân biệt hoa thường)
+        if (typeof search === "string" && search.trim() !== "") {
+            const keyword = search.trim().toLowerCase();
+            const filtered = posts.filter((p) => (p.title || "").toLowerCase().includes(keyword));
+            return res.json(filtered);
+        }
+
+        // Không có search: trả về tất cả bài viết
+        return res.json(posts);
+    } catch (error) {
+        console.error("getPosts error:", error);
+        return res.status(500).json({ message: "Đã xảy ra lỗi khi lấy danh sách bài viết" });
+    }
 }
 
 export function getPostById(req, res){
